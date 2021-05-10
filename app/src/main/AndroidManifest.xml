@@ -16,7 +16,7 @@
             android:theme="@style/Theme.TryJetpackCompose.NoActionBar">
 
         </activity>
-        <activity android:name=".basic.TryComposeLayoutActivity">
+        <activity android:name=".basic.TryComposeLayoutActivity" android:theme="@style/Theme.TryJetpackCompose.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
