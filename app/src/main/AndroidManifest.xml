@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="id.revan.tryjetpackcompose">
 
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -17,6 +20,9 @@
 
         </activity>
         <activity android:name=".basic.TryComposeLayoutActivity" android:theme="@style/Theme.TryJetpackCompose.NoActionBar">
+
+        </activity>
+        <activity android:name=".basic.TryComposeListActivity" android:theme="@style/Theme.TryJetpackCompose.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

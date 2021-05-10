@@ -1,13 +1,19 @@
 package id.revan.tryjetpackcompose.basic
 
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -24,6 +30,49 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import id.revan.tryjetpackcompose.R
 
+@Composable
+@Preview("All content")
+fun TryComposeLayoutScreen() {
+    val columnPage = 1
+    val rowPage = 2
+    val boxPage = 3
+    val constraintPage = 4
+    var page by remember {
+        mutableStateOf(columnPage)
+    }
+
+    Column {
+        LazyRow(Modifier.padding(16.dp)) {
+            item {
+                Button(onClick = { page = columnPage }) {
+                    Text(text = "Column Sample")
+                }
+                Spacer(modifier = Modifier.width(8.dp))
+                Button(onClick = { page = rowPage }) {
+                    Text(text = "Row Sample")
+                }
+                Spacer(modifier = Modifier.width(8.dp))
+                Button(onClick = { page = boxPage }) {
+                    Text(text = "Box Sample")
+                }
+                Spacer(modifier = Modifier.width(8.dp))
+                Button(onClick = { page = constraintPage }) {
+                    Text(text = "Constraint Sample")
+                }
+            }
+        }
+
+        // Main content
+        Crossfade(targetState = page) {
+            when (it) {
+                columnPage -> ColumnContent()
+                rowPage -> RowContent()
+                boxPage -> BoxContent()
+                constraintPage -> ConstraintLayoutContent()
+            }
+        }
+    }
+}
 
 @Preview("Column Content")
 @Composable
@@ -116,7 +165,7 @@ fun ConstraintLayoutContent() {
                 top.linkTo(title.bottom, margin = 8.dp)
                 end.linkTo(parent.end, margin = 16.dp)
                 width = Dimension.preferredWrapContent
-            }, maxLines = 3, overflow = TextOverflow.Ellipsis
+            }.fillMaxWidth(), maxLines = 3, overflow = TextOverflow.Ellipsis
         )
     }
 }
