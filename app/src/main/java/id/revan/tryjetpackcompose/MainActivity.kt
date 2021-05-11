@@ -1,38 +1,65 @@
 package id.revan.tryjetpackcompose
 
+import android.content.Intent
 import android.os.Bundle
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.tooling.preview.Preview
-import id.revan.tryjetpackcompose.ui.theme.TryJetpackComposeTheme
+import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.*
+import androidx.compose.runtime.*
+import id.revan.tryjetpackcompose.basic.layouts.TryComposeLayoutActivity
+import id.revan.tryjetpackcompose.basic.lists.TryComposeListActivity
+import id.revan.tryjetpackcompose.basic.widgets.TryComposeBasicWidgetActivity
+import id.revan.tryjetpackcompose.fragment.InfoDialogFragment
+import id.revan.tryjetpackcompose.socialmedia.UserStatusActivity
 
-class MainActivity : ComponentActivity() {
+class MainActivity : AppCompatActivity() {
+
+    @ExperimentalAnimationApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            TryJetpackComposeTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(color = MaterialTheme.colors.background) {
-                    Greeting("Android")
+            MaterialTheme {
+                Scaffold(
+                    topBar = {
+                        CustomTopAppBar(title = "Try Jetpack Compose")
+                    }
+                ) {
+                    MainScreen({
+                        startActivity(
+                            Intent(
+                                this@MainActivity,
+                                TryComposeLayoutActivity::class.java
+                            )
+                        )
+                    }, {
+                        startActivity(
+                            Intent(
+                                this@MainActivity,
+                                TryComposeBasicWidgetActivity::class.java
+                            )
+                        )
+                    }, {
+                        startActivity(
+                            Intent(
+                                this@MainActivity,
+                                TryComposeListActivity::class.java
+                            )
+                        )
+                    }, {
+                        startActivity(
+                            Intent(
+                                this@MainActivity,
+                                UserStatusActivity::class.java
+                            )
+                        )
+                    }, {
+                        InfoDialogFragment.newInstance().show(supportFragmentManager, "")
+                    })
                 }
             }
         }
-    }
-}
 
-@Composable
-fun Greeting(name: String) {
-    Text(text = "Hello $name!")
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    TryJetpackComposeTheme {
-        Greeting("Revando")
     }
 }

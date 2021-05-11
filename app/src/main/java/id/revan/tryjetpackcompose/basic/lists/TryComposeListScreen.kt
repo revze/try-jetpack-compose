@@ -1,11 +1,13 @@
-package id.revan.tryjetpackcompose.basic
+package id.revan.tryjetpackcompose.basic.lists
 
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.*
-import androidx.compose.material.Button
 import androidx.compose.material.Card
 import androidx.compose.material.Divider
 import androidx.compose.material.Text
@@ -18,41 +20,32 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.glide.GlideImage
 import id.revan.tryjetpackcompose.R
+import id.revan.tryjetpackcompose.SampleDropdownMenu
+import id.revan.tryjetpackcompose.entity.Sample
 
 @ExperimentalFoundationApi
 @Composable
 @Preview("All content")
 fun TryComposeListScreen() {
-    val lazyColumnPage = 1
-    val lazyRowPage = 2
-    val lazyVerticalGridPage = 3
-    var page by remember {
-        mutableStateOf(lazyColumnPage)
+    val samples = listOf(
+        Sample(id = 1, name = "LazyColumn Sample"),
+        Sample(id = 2, name = "LazyRow Sample"),
+        Sample(id = 3, name = "LazyVerticalGrid Sample")
+    )
+    var selectedSample by remember {
+        mutableStateOf(samples[0])
     }
-
     Column {
-        LazyRow(Modifier.padding(16.dp)) {
-            item {
-                Button(onClick = { page = lazyColumnPage }) {
-                    Text(text = "LazyColumn Sample")
-                }
-                Spacer(modifier = Modifier.width(8.dp))
-                Button(onClick = { page = lazyRowPage }) {
-                    Text(text = "LazyRow Sample")
-                }
-                Spacer(modifier = Modifier.width(8.dp))
-                Button(onClick = { page = lazyVerticalGridPage }) {
-                    Text(text = "LazyVerticalGrid Sample")
-                }
-            }
+        SampleDropdownMenu(samples = samples, selectedSample = selectedSample) {
+            selectedSample = it
         }
 
         // Main content
-        Crossfade(targetState = page) {
-            when (it) {
-                lazyColumnPage -> SampleLazyColumnList()
-                lazyRowPage -> SampleLazyRowList()
-                lazyVerticalGridPage -> SampleLazyVerticalGridList()
+        Crossfade(targetState = selectedSample) {
+            when (it.id) {
+                1 -> SampleLazyColumnList()
+                2 -> SampleLazyRowList()
+                3 -> SampleLazyVerticalGridList()
             }
         }
     }
@@ -91,7 +84,8 @@ fun SampleLazyRowList() {
             Card(
                 Modifier
                     .padding(8.dp)
-                    .width(160.dp)) {
+                    .width(160.dp)
+            ) {
                 Column {
                     Image(
                         painterResource(R.drawable.bg_mount),

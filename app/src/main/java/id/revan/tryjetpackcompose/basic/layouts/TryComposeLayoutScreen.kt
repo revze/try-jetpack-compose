@@ -1,19 +1,14 @@
-package id.revan.tryjetpackcompose.basic
+package id.revan.tryjetpackcompose.basic.layouts
 
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -29,46 +24,33 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import id.revan.tryjetpackcompose.R
+import id.revan.tryjetpackcompose.SampleDropdownMenu
+import id.revan.tryjetpackcompose.entity.Sample
 
 @Composable
 @Preview("All content")
 fun TryComposeLayoutScreen() {
-    val columnPage = 1
-    val rowPage = 2
-    val boxPage = 3
-    val constraintPage = 4
-    var page by remember {
-        mutableStateOf(columnPage)
-    }
-
     Column {
-        LazyRow(Modifier.padding(16.dp)) {
-            item {
-                Button(onClick = { page = columnPage }) {
-                    Text(text = "Column Sample")
-                }
-                Spacer(modifier = Modifier.width(8.dp))
-                Button(onClick = { page = rowPage }) {
-                    Text(text = "Row Sample")
-                }
-                Spacer(modifier = Modifier.width(8.dp))
-                Button(onClick = { page = boxPage }) {
-                    Text(text = "Box Sample")
-                }
-                Spacer(modifier = Modifier.width(8.dp))
-                Button(onClick = { page = constraintPage }) {
-                    Text(text = "Constraint Sample")
-                }
-            }
+        val samples = listOf(
+            Sample(id = 1, name = "Column Sample"),
+            Sample(id = 2, name = "Row Sample"),
+            Sample(id = 3, name = "Box Sample"),
+            Sample(id = 4, name = "ConstraintLayout Sample"),
+        )
+        var selectedSample by remember {
+            mutableStateOf(samples[0])
+        }
+        SampleDropdownMenu(samples = samples, selectedSample = selectedSample) {
+            selectedSample = it
         }
 
         // Main content
-        Crossfade(targetState = page) {
-            when (it) {
-                columnPage -> ColumnContent()
-                rowPage -> RowContent()
-                boxPage -> BoxContent()
-                constraintPage -> ConstraintLayoutContent()
+        Crossfade(targetState = selectedSample) {
+            when (it.id) {
+                1 -> ColumnContent()
+                2 -> RowContent()
+                3 -> BoxContent()
+                4 -> ConstraintLayoutContent()
             }
         }
     }
@@ -82,17 +64,20 @@ fun ColumnContent() {
             Text("Email")
         }, modifier = Modifier
             .fillMaxWidth()
-            .padding(16.dp))
+            .padding(16.dp)
+        )
         TextField("", {}, label = {
             Text("Password")
         }, modifier = Modifier
             .fillMaxWidth()
             .padding(start = 16.dp, bottom = 16.dp, end = 16.dp)
         )
-        Button({},
+        Button(
+            {},
             Modifier
                 .padding(horizontal = 16.dp)
-                .fillMaxWidth()) {
+                .fillMaxWidth()
+        ) {
             Text("Submit")
         }
     }
@@ -118,10 +103,12 @@ fun RowContent() {
                 .align(Alignment.CenterVertically),
             style = TextStyle(fontSize = 16.sp)
         )
-        Button({},
+        Button(
+            {},
             Modifier
                 .padding(horizontal = 16.dp)
-                .align(Alignment.CenterVertically)) {
+                .align(Alignment.CenterVertically)
+        ) {
             Text("Follow")
         }
     }
@@ -160,12 +147,14 @@ fun ConstraintLayoutContent() {
         )
         Text(
             stringResource(R.string.dummy_text3),
-            modifier = Modifier.constrainAs(description) {
-                start.linkTo(thumbnail.end, margin = 16.dp)
-                top.linkTo(title.bottom, margin = 8.dp)
-                end.linkTo(parent.end, margin = 16.dp)
-                width = Dimension.preferredWrapContent
-            }.fillMaxWidth(), maxLines = 3, overflow = TextOverflow.Ellipsis
+            modifier = Modifier
+                .constrainAs(description) {
+                    start.linkTo(thumbnail.end, margin = 16.dp)
+                    top.linkTo(title.bottom, margin = 8.dp)
+                    end.linkTo(parent.end, margin = 16.dp)
+                    width = Dimension.preferredWrapContent
+                }
+                .fillMaxWidth(), maxLines = 3, overflow = TextOverflow.Ellipsis
         )
     }
 }
