@@ -1,15 +1,11 @@
 package id.revan.tryjetpackcompose.basic.widgets
 
 import androidx.compose.animation.Crossfade
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.scrollable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.rounded.Download
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material.icons.rounded.Settings
@@ -48,8 +44,7 @@ fun TryComposeBasicWidgetScreen() {
     var selectedSample by remember {
         mutableStateOf(samples[0])
     }
-    val scrollState = rememberScrollState()
-    Column(Modifier.scrollable(scrollState, Orientation.Vertical)) {
+    Column {
         SampleDropdownMenu(samples = samples, selectedSample = selectedSample) {
             selectedSample = it
         }
@@ -156,7 +151,13 @@ fun SampleTextFieldContent() {
 @Composable
 @Preview("Sample Image Content")
 fun SampleImageContent() {
-    Column(Modifier.padding(16.dp)) {
+    val scrollState = rememberScrollState()
+    Column(
+        Modifier
+            .fillMaxWidth()
+            .padding(16.dp)
+            .verticalScroll(scrollState)
+    ) {
         Image(
             painterResource(R.drawable.ic_verified),
             contentDescription = "Verified Icon",
@@ -204,15 +205,24 @@ fun SampleDropdownContent() {
             }
             .fillMaxWidth()
             .align(Alignment.TopStart), border = BorderStroke(1.dp, Color.DarkGray)) {
-            Text(selectedOption, Modifier.padding(16.dp))
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                Text(selectedOption, Modifier.padding(16.dp))
+                Icon(
+                    Icons.Default.ArrowDropDown,
+                    contentDescription = null,
+                    modifier = Modifier.padding(16.dp)
+                )
+            }
         }
-        DropdownMenu(isExpanded, {
-            // On dismissed
-            isExpanded = false
-        },
+        DropdownMenu(
+            isExpanded, {
+                // On dismissed
+                isExpanded = false
+            },
             Modifier
                 .fillMaxWidth()
-                .align(Alignment.TopCenter)) {
+                .align(Alignment.TopCenter)
+        ) {
             options.forEach {
                 DropdownMenuItem({
                     // On item selected
